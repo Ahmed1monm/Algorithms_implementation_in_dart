@@ -1,3 +1,5 @@
+import 'dart:math';
+
 class SearchAlgorithms {
   /* 
   Binary Search which is D&C algorithm 
@@ -38,5 +40,57 @@ class SearchAlgorithms {
     }
     print('no match');
     return null;
+  }
+
+  /*
+    Jumb search tackes sorted array 
+    returns int number which is the index of the target
+    O((n)^0.5)
+  */
+  JumpSearch(List<int> myList, int Target) {
+    int mainListLength = myList.length;
+    int block = (sqrt(mainListLength)).floor();
+    int counter = 0;
+
+    int? specialLinearSearch(int start, int end, int target) {
+      List<int> subArray = [];
+
+      // Adding the section I will aplly linear search on it
+      for (int i = 0; i < (end - start + 1); i++) {
+        subArray.add(myList[start + i]);
+      }
+      print(subArray.toString());
+      for (int i = 0; i < subArray.length; i++) {
+        if (target == subArray[i]) {
+          return i;
+        }
+      }
+      return null;
+    }
+
+    while (counter * block <= mainListLength) {
+      print(counter.toString());
+      // For applying linear search
+      if (myList[counter * block] == Target) {
+        return (counter * block);
+      }
+
+      if (myList[counter * block] < Target) {
+        counter++;
+      } else if (myList[counter * block] > Target) {
+        int? subIndex = specialLinearSearch(
+            ((counter - 1) * block), (counter * block), Target);
+
+        if (subIndex != null) {
+          print(subIndex.toString());
+          print(((counter - 1) * block).toString());
+          return subIndex + ((counter - 1) * block);
+        } else {
+          print('sub index = null');
+        }
+      }
+    }
+
+    print('no match');
   }
 }
