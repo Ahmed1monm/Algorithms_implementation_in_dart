@@ -47,50 +47,36 @@ class SearchAlgorithms {
     returns int number which is the index of the target
     O((n)^0.5)
   */
-  JumpSearch(List<int> myList, int Target) {
-    int mainListLength = myList.length;
-    int block = (sqrt(mainListLength)).floor();
-    int counter = 0;
-
-    int? specialLinearSearch(int start, int end, int target) {
-      List<int> subArray = [];
-
-      // Adding the section I will aplly linear search on it
-      for (int i = 0; i < (end - start + 1); i++) {
-        subArray.add(myList[start + i]);
+  int? JumpSearch(List arr, int target) {
+    // initialize pointers
+    int leadPtr = 0;
+    int lagPtr = 0;
+    // calc jump
+    num jump = pow(arr.length, 0.5);
+    // loop on array
+    while (leadPtr < (arr.length)) {
+      //base case
+      if (arr[leadPtr] == target) {
+        return leadPtr;
       }
-      print(subArray.toString());
-      for (int i = 0; i < subArray.length; i++) {
-        if (target == subArray[i]) {
-          return i;
-        }
+      // jump
+      else if (target > arr[leadPtr]) {
+        lagPtr = leadPtr + 1;
+        leadPtr += jump.floor() - 1;
       }
-      return null;
-    }
-
-    while (counter * block <= mainListLength) {
-      print(counter.toString());
-      // For applying linear search
-      if (myList[counter * block] == Target) {
-        return (counter * block);
-      }
-
-      if (myList[counter * block] < Target) {
-        counter++;
-      } else if (myList[counter * block] > Target) {
-        int? subIndex = specialLinearSearch(
-            ((counter - 1) * block), (counter * block), Target);
-
-        if (subIndex != null) {
-          print(subIndex.toString());
-          print(((counter - 1) * block).toString());
-          return subIndex + ((counter - 1) * block);
-        } else {
-          print('sub index = null');
+      // check if we got the range that our target is belong
+      else if (arr[leadPtr] > target) {
+        // linear search in range lead and lag pointers
+        for (int i = lagPtr; i < leadPtr; i++) {
+          if (arr[i] == target) {
+            return i;
+          }
         }
       }
     }
 
-    print('no match');
+    // for wrong target
+    print('not found');
+    return null;
   }
 }
