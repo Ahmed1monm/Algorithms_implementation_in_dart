@@ -79,4 +79,41 @@ class SearchAlgorithms {
     print('not found');
     return null;
   }
+
+// exponential search
+// input ==> sorted array
+// Time complexity ==> O(lg n)
+//return index
+  exponentialSearch(List<int> sortedList, int target) {
+    if (sortedList[0] == target) return 0;
+    int i = 1;
+    while (i < sortedList.length) {
+      if (sortedList[i] == target) return i;
+      // find subArray
+      if (sortedList[i] < target) {
+        if (i * 2 > (sortedList.length - 1)) {
+          i = sortedList.length - 1;
+        } else {
+          i = i * 2;
+        }
+      } else if (sortedList[i] > target) {
+        // binary search in subArray
+        int startPointer = (i / 2).floor();
+        int endPointer = i;
+        int midPointer;
+        while (startPointer < endPointer) {
+          midPointer = ((startPointer + endPointer) / 2).floor();
+          if (sortedList[midPointer] == target)
+            return midPointer;
+          else if (sortedList[midPointer] > target)
+            endPointer = midPointer - 1;
+          else if (sortedList[midPointer] < target)
+            startPointer = midPointer + 1;
+          else {
+            print('not found or array not sorted ');
+          }
+        }
+      }
+    }
+  }
 }
